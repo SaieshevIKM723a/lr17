@@ -1,81 +1,75 @@
-﻿#include <iostream>
+#include <iostream>
+#include <string>
+
 using namespace std;
+
 class Room {
+private:
+    double area;
+
 public:
 
-    Room(double area);
+    Room(double area) {
+        this->area = area;
+    }
 
-
-    double getArea() const;
-
-private:
-    double area_; 
+    double getArea() const {
+        return area;
+    }
 };
 
-
-Room::Room(double area) : area_(area) {}
-
-
-double Room::getArea() const {
-    return area_;
-}
-
-class OneRoomApartment : public Room {
-public:
- 
-    OneRoomApartment(double roomArea, double kitchenArea, int floor);
-
-
-    double getKitchenArea() const;
-    int getFloor() const;
-
+class OneRoomApartment {
 private:
-    double kitchenArea_; 
-    int floor_; 
-};
+    Room room;
+    double kitchenArea;
+    int floor;
 
-
-OneRoomApartment::OneRoomApartment(double roomArea, double kitchenArea, int floor)
-    : Room(roomArea), kitchenArea_(kitchenArea), floor_(floor) {}
-
-
-double OneRoomApartment::getKitchenArea() const {
-    return kitchenArea_;
-}
-
-
-int OneRoomApartment::getFloor() const {
-    return floor_;
-}
-
-class CityOneRoomApartment : public OneRoomApartment {
 public:
 
-    CityOneRoomApartment(double roomArea, double kitchenArea, int floor, const string& cityName);
+    OneRoomApartment(const Room& room, double kitchenArea, int floor) : room(room) {
+        this->kitchenArea = kitchenArea;
+        this->floor = floor;
+    }
 
- 
-    void printInfo();
+    double getRoomArea() const {
+        return room.getArea();
+    }
 
-private:
-    string cityName_; 
+    double getKitchenArea() const {
+        return kitchenArea;
+    }
+
+    int getFloor() const {
+        return floor;
+    }
 };
 
-CityOneRoomApartment::CityOneRoomApartment(double roomArea, double kitchenArea, int floor,
-    const string& cityName)
-    : OneRoomApartment(roomArea, kitchenArea, floor), cityName_(cityName) {}
+class PublicOneRoomApartment : public OneRoomApartment {
+private:
+    string city;
 
+public:
+    PublicOneRoomApartment(const Room& room, double kitchenArea, int floor, const string& city)
+        : OneRoomApartment(room, kitchenArea, floor), city(city) {}
 
-void CityOneRoomApartment::printInfo() {
-    cout << "One-room apartment in " << cityName_ << ":" << endl;
-    cout << "  Room area: " << getArea() << " sq m" << endl;
-    cout << "  Kitchen area: " << getKitchenArea() << " sq m" << endl;
-    cout << "  Floor: " << getFloor() << endl;
-}
+    ~PublicOneRoomApartment() {
+        cout << "Apartment in " << city << " is being rented." << endl;
+    }
+
+    void print() const {
+        cout << "Apartment in " << city << ":" << endl;
+        cout << "Room area: " << getRoomArea() << " sq.m" << endl;
+        cout << "Kitchen area: " << getKitchenArea() << " sq.m" << endl;
+        cout << "Floor: " << getFloor() << endl;
+    }
+};
 
 int main() {
-    CityOneRoomApartment apartment(17.5, 10, 5, "Kharkiv");
+ 
+    Room room(20.0);
+    PublicOneRoomApartment apartment(room, 10.0, 5, "Kharkiv");
 
-    apartment.printInfo();
+    apartment.print();
 
     return 0;
 }
